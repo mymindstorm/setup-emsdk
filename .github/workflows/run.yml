@@ -5,4 +5,4 @@ jobs:
   check_pr:
     runs-on: ubuntu-latest
     steps:
-    - uses: setup-emsdk
+    - uses: mymindstorm/setup-emsdk@master
