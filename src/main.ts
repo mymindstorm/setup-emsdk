@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 import * as tc from '@actions/tool-cache';
+import * as os from 'os';
 
 async function run() {
   try {
@@ -14,7 +15,7 @@ async function run() {
     let foundInCache = false;
 
     if (emArgs.version !== "latest" && emArgs.noCache === "false") {
-      emsdkFolder = tc.find('emsdk', emArgs.version);
+      emsdkFolder = tc.find('emsdk', emArgs.version, os.arch());
     } 
 
     if (!emsdkFolder) {
@@ -24,7 +25,11 @@ async function run() {
       foundInCache = true;
     }
 
-    const emsdk = `${emsdkFolder}/emsdk-master/emsdk`
+    let emsdk = `${emsdkFolder}/emsdk-master/emsdk`
+
+    if (os.platform() === "win32") {
+      emsdk += ".ps1"
+    }
 
     if (emArgs.noInstall === "true") {
       core.addPath(`${emsdkFolder}/emsdk-master`);
@@ -34,6 +39,10 @@ async function run() {
 
     if (!foundInCache) {
       await exec.exec(`${emsdk} install ${emArgs.version}`);
+
+      if (emArgs.version !== "latest" && emArgs.noCache === "false") {
+        await tc.cacheDir(emsdkFolder, 'emsdk', emArgs.version, os.arch());
+      }
     }
 
     await exec.exec(`${emsdk} activate ${emArgs.version}`);
