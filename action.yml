@@ -1,10 +1,19 @@
-name: 'Node 12 Template Action'
-description: 'Get started with Node actions'
+name: 'Setup Emscripten toolchain'
+description: 'Download emsdk and optionally install a version of Emscripten'
 author: 'mymindstorm'
-# inputs:
-#   myInput:
-#     description: 'Input to use'
-#     default: 'world'
+inputs:
+  version:
+    description: 'Version to install'
+    default: 'latest'
+  no-install:
+    description: "If true will not download any version of Emscripten. emsdk will still be added to PATH."
+    default: false
+  no-cache:
+    description: "If true will not cache any downloads."
+    default: false
 runs:
   using: 'node12'
   main: 'lib/main.js'
+branding:
+  icon: 'download'
+  color: 'green'

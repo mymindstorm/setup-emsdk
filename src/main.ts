@@ -4,17 +4,38 @@ import * as tc from '@actions/tool-cache';
 
 async function run() {
   try {
-    const emsdkArchive = await tc.downloadTool("https://github.com/emscripten-core/emsdk/archive/master.tar.gz");
-    const emsdkFolder = await tc.extractTar(emsdkArchive);
+    const emArgs = {
+      version: await core.getInput("version"),
+      noInstall: await core.getInput("no-install"),
+      noCache: await core.getInput("no-cache")
+    };
+
+    let emsdkFolder;
+    let foundInCache = false;
+    if (emArgs.version !== "latest" && emArgs.noCache === "false") {
+      emsdkFolder = tc.find('emsdk', emArgs.version);
+      foundInCache = true;
+    } else {
+      const emsdkArchive = await tc.downloadTool("https://github.com/emscripten-core/emsdk/archive/master.tar.gz");
+      emsdkFolder = await tc.extractTar(emsdkArchive);
+    }
     const emsdk = `${emsdkFolder}/emsdk-master/emsdk`
 
-    await exec.exec(`${emsdk} install latest`);
-    await exec.exec(`${emsdk} activate latest`);
+    if (emArgs.noInstall === "true") {
+      core.addPath(`${emsdkFolder}/emsdk-master`);
+      core.exportVariable("EMSDK", `${emsdkFolder}/emsdk-master`);
+      return;
+    }
+
+    if (!foundInCache) {
+      await exec.exec(`${emsdk} install ${emArgs.version}`);
+    }
+
+    await exec.exec(`${emsdk} activate ${emArgs.version}`);
     await exec.exec(`${emsdk} construct_env`, [], {listeners: {
       stdline(message) {
         const pathRegex = new RegExp(/PATH \+= (\S+)/)
         const pathResult = pathRegex.exec(message);
-
 
         if (pathResult) {
           core.addPath(pathResult[1]);

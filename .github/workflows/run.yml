@@ -2,10 +2,38 @@ name: "Run"
 on: [pull_request, push]
 
 jobs:
-  check_pr:
-    runs-on: ubuntu-latest
+  defaults:
+    runs-on: [ubuntu-latest, windows-latest, macos-latest]
     steps:
     - uses: mymindstorm/setup-emsdk@master
 
     - name: Verify
       run: emcc -v
+  cache-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mymindstorm/setup-emsdk@master
+        with:
+          version: 1.38.40
+
+      - name: Verify
+        run: emcc -v
+  no-cache-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mymindstorm/setup-emsdk@master
+        with:
+          version: 1.38.40
+          no-cache: true
+
+      - name: Verify
+        run: emcc -v
+  no-install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mymindstorm/setup-emsdk@master
+        with:
+          no-install: true
+
+      - name: Verify
+        run: emsdk list
