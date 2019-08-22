@@ -1,12 +1,14 @@
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
+import * as tc from '@actions/tool-cache';
 
 async function run() {
   try {
-    await exec.exec("git clone https://github.com/emscripten-core/emsdk.git");
-    await exec.exec("./emsdk/emsdk install latest");
-    await exec.exec("./emsdk/emsdk activate latest");
-    await exec.exec("source ./emsdk_env.sh");
+    const emsdkArchive = await tc.downloadTool("https://github.com/emscripten-core/emsdk/archive/master.tar.gz");
+    const emsdkFolder = await tc.extractTar(emsdkArchive);
+    await exec.exec(`${emsdkFolder}/emsdk install latest`);
+    await exec.exec(`${emsdkFolder}/emsdk activate latest`);
+    await exec.exec(`source ${emsdkFolder}/emsdk_env.sh`);
   } catch (error) {
     core.setFailed(error.message);
   }
