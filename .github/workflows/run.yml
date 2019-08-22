@@ -5,4 +5,9 @@ jobs:
   check_pr:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v1
+
+    - name: "npm ci"
+      run: npm ci
+      
     - uses: mymindstorm/setup-emsdk@master
