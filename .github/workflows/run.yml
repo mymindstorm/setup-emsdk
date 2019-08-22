@@ -6,3 +6,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: mymindstorm/setup-emsdk@master
+
+    - name: Verify
+      run: emcc -v

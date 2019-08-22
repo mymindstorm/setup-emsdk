@@ -17,8 +17,7 @@ async function run() {
 
 
         if (pathResult) {
-          core.debug(pathResult.toString());
-          core.addPath(pathResult[0]);
+          core.addPath(pathResult[1]);
           return;
         }
         
@@ -26,8 +25,7 @@ async function run() {
         const envResult = envRegex.exec(message);
 
         if (envResult) {
-          core.debug(envResult.toString());
-          core.exportVariable(envResult[0], envResult[1]);
+          core.exportVariable(envResult[1], envResult[2]);
           return;
         }
       }
