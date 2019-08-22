@@ -1,9 +1,23 @@
-# JavaScript Action Template
+# setup-emsdk
 
-This template offers an easy way to get started writing a javascript action with TypeScript compile time support, unit testing with Jest and using the GitHub Actions Toolkit.
+This actions step downloads emsdk and installs a version of Emscripten.
 
-## Getting Started
+# Usage
 
-See the walkthrough located [here](https://github.com/actions/toolkit/blob/master/docs/javascript-action.md).
+```yaml
+name: "emsdk"
+on: [push]
 
-In addition to walking your through how to create an action, it also provides strategies for versioning, releasing and referencing your actions.
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mymindstorm/setup-emsdk@v1
+
+      - name: Verify
+        run: emcc -v
+```
+
+# Options
+
+See [action.yml](action.yml)
