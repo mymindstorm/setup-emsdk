@@ -15,9 +15,10 @@ async function run() {
         const pathRegex = new RegExp(/PATH \+= (\S+)/)
         const pathResult = pathRegex.exec(message);
 
+
         if (pathResult) {
+          core.debug(pathResult.toString());
           core.addPath(pathResult[0]);
-          core.debug(`Add path: ${pathResult[0]}`);
           return;
         }
         
@@ -25,8 +26,8 @@ async function run() {
         const envResult = envRegex.exec(message);
 
         if (envResult) {
+          core.debug(envResult.toString());
           core.exportVariable(envResult[0], envResult[1]);
-          core.debug(`Set env: ${envResult[0]} = ${envResult[1]}`);
           return;
         }
       }
