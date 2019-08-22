@@ -13,9 +13,12 @@ async function run() {
 
     let emsdkFolder;
     let foundInCache = false;
-
+    
+    core.warning(typeof emArgs.noCache)
+    console.log(emArgs)
     if (emArgs.version !== "latest" && emArgs.noCache === "false") {
       emsdkFolder = tc.find('emsdk', emArgs.version, os.arch());
+      core.warning("a" + emsdkFolder);
     } 
 
     if (!emsdkFolder) {
