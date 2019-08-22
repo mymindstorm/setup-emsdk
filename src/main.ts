@@ -12,13 +12,18 @@ async function run() {
 
     let emsdkFolder;
     let foundInCache = false;
+
     if (emArgs.version !== "latest" && emArgs.noCache === "false") {
       emsdkFolder = tc.find('emsdk', emArgs.version);
-      foundInCache = true;
+    } 
+
+    if (!emsdkFolder) {
+      const emsdkArchive = await tc.downloadTool("https://github.com/emscripten-core/emsdk/archive/master.zip");
+      emsdkFolder = await tc.extractZip(emsdkArchive);
     } else {
-      const emsdkArchive = await tc.downloadTool("https://github.com/emscripten-core/emsdk/archive/master.tar.gz");
-      emsdkFolder = await tc.extractTar(emsdkArchive);
+      foundInCache = true;
     }
+
     const emsdk = `${emsdkFolder}/emsdk-master/emsdk`
 
     if (emArgs.noInstall === "true") {
