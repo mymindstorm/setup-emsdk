@@ -1,0 +1,8 @@
+name: "Run"
+on: [pull_request, push]
+
+jobs:
+  check_pr:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: setup-emsdk
