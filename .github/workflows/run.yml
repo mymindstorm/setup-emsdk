@@ -3,7 +3,10 @@ on: [pull_request, push]
 
 jobs:
   defaults:
-    runs-on: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
     - uses: mymindstorm/setup-emsdk@master
 
