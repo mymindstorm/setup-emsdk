@@ -28,7 +28,7 @@ async function run() {
     let emsdk = `${emsdkFolder}/emsdk-master/emsdk`
 
     if (os.platform() === "win32") {
-      emsdk = `${emsdkFolder}\\emsdk-master\\emsdk.ps1`
+      emsdk = `powershell ${emsdkFolder}\\emsdk-master\\emsdk.ps1`
     }
 
     if (emArgs.noInstall === "true") {
