@@ -20,4 +20,16 @@ jobs:
 
 # Options
 
+```yaml
+  version:
+    description: 'Version to install'
+    default: 'latest'
+  no-install:
+    description: "If true will not download any version of Emscripten. emsdk will still be added to PATH."
+    default: false
+  no-cache:
+    description: "If true will not cache any downloads."
+    default: false
+```
+
 See [action.yml](action.yml)
