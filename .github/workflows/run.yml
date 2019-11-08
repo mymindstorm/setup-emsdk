@@ -27,12 +27,14 @@ jobs:
         with:
           version: 1.39.1
           store-actions-cache: 'emsdk-cache'
+          no-cache: true
       - name: Setup emsdk (cache found)        
         uses: mymindstorm/setup-emsdk@actions-cache
         if: steps.cache.outputs.cache-hit == 'true'
         with:
           version: 1.39.1
           actions-cache-folder: 'emsdk-cache'
+          no-cache: true
       - name: Verify
         run: emcc -v
   no-install:

@@ -40,6 +40,9 @@ jobs:
     # The cache folder will be placed in the build directory,
     #  so make sure it doesn't conflict with anything!
     store-actions-cache: 'emsdk-cache'
+    # This stops it from using tc.cacheDir since we are using
+    #  actions/cache.
+    no-cache: true
 
 - name: Setup emsdk (cache found)        
   uses: mymindstorm/setup-emsdk@v1
@@ -49,6 +52,7 @@ jobs:
     version: 1.38.40
     # Set to the same folder as store-actions-cache
     actions-cache-folder: 'emsdk-cache'
+    no-cache: true
 
 - name: Verify
   run: emcc -v
