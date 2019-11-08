@@ -26,7 +26,7 @@ jobs:
           version: 1.38.40
           store-actions-cache: 'emsdk-cache'
       - uses: mymindstorm/setup-emsdk@actions-cache
-        if: steps.cache.outputs.cache-hit = 'true'
+        if: steps.cache.outputs.cache-hit == 'true'
         with:
           version: 1.38.40
           actions-cache-folder: 'emsdk-cache'
