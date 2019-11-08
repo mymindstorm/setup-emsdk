@@ -29,6 +29,7 @@ async function run() {
         foundInCache = true;
       } catch (e) {
         core.error(`Could not access cached files at path: ${fullCachePath}`);
+        core.debug(fs.readdirSync(fullCachePath).toString());
       }
     }
 
