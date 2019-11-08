@@ -88,7 +88,7 @@ async function run() {
 
     if (emArgs.storeActionsCache) {
       fs.mkdirSync(`${process.env.GITHUB_WORKSPACE}/${emArgs.storeActionsCache}/emsdk-master`, { recursive: true });
-      await exec.exec(`cp -r ${emsdkFolder}/emsdk-master ${process.env.GITHUB_WORKSPACE}/${emArgs.storeActionsCache}/emsdk-master`);
+      await exec.exec(`cp -r ${emsdkFolder}/emsdk-master/* ${process.env.GITHUB_WORKSPACE}/${emArgs.storeActionsCache}/emsdk-master`);
     }
   } catch (error) {
     core.setFailed(error.message);
