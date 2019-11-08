@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: mymindstorm/setup-emsdk@v1
+      - uses: mymindstorm/setup-emsdk@v2
 
       - name: Verify
         run: emcc -v
@@ -31,7 +31,7 @@ jobs:
     key: ${{ runner.os }}-emsdk-1.38.40
 
 - name: Setup emsdk (cache not found)
-  uses: mymindstorm/setup-emsdk@v1
+  uses: mymindstorm/setup-emsdk@v2
   if: steps.cache.outputs.cache-hit != 'true'
   with:
     # Make sure to set a version number!
@@ -45,7 +45,7 @@ jobs:
     no-cache: true
 
 - name: Setup emsdk (cache found)        
-  uses: mymindstorm/setup-emsdk@v1
+  uses: mymindstorm/setup-emsdk@v2
   if: steps.cache.outputs.cache-hit == 'true'
   with:
     # Make sure to set a version number!
