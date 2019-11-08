@@ -26,8 +26,10 @@ async function run() {
       try {
         fs.accessSync(fullCachePath + '/emsdk-master/emsdk', fs.constants.X_OK)
         emsdkFolder = fullCachePath;
+        foundInCache = true;
       } catch (e) {
         core.error(`Could not access cached files at path: ${fullCachePath}`);
+        core.debug(fs.readdirSync(fullCachePath).toString());
       }
     }
 
