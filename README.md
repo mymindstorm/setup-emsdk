@@ -20,57 +20,58 @@ jobs:
 
 ## Use with actions/cache
 
-TODO
-
-Make sure to set a version number!
-
-
 ```yaml
-name: Example Caching with emsdk
+- name: Cache emsdk
+  uses: actions/cache@v1
+  id: cache # This is important!
+  with:
+    # Set to the same folder as store-actions-cache (more below)
+    path: 'emsdk-cache'
+    # Set the end bit to emsdk version
+    key: ${{ runner.os }}-emsdk-1.38.40
 
-on: push
+- name: Setup emsdk (cache not found)
+  uses: mymindstorm/setup-emsdk@v1
+  if: steps.cache.outputs.cache-hit != 'true'
+  with:
+    # Make sure to set a version number!
+    version: 1.38.40
+    # This is the name of the cache folder.
+    # The cache folder will be placed in the build directory,
+    #  so make sure it doesn't conflict with anything!
+    store-actions-cache: 'emsdk-cache'
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v1
+- name: Setup emsdk (cache found)        
+  uses: mymindstorm/setup-emsdk@v1
+  if: steps.cache.outputs.cache-hit == 'true'
+  with:
+    # Make sure to set a version number!
+    version: 1.38.40
+    # Set to the same folder as store-actions-cache
+    actions-cache-folder: 'emsdk-cache'
 
-    - name: Cache emsdk
-      uses: actions/cache@v1
-      with:
-        path: node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-
-    - name: Setup emsdk 
-    uses: mymindstorm/setup-emsdk@v1
-      if: steps.cache.outputs.cache-hit != 'true'
-      with:
-       cache folder
+- name: Verify
+  run: emcc -v
 ```
 
 # Options
 
 ```yaml
-  version:
-    description: 'Version to install'
-    default: 'latest'
-  no-install:
-    description: "If true will not download any version of Emscripten. emsdk will still be added to PATH."
-    default: false
-  no-cache:
-    description: "If true will not cache any downloads with tc.cacheDir."
-    default: false
-  store-actions-cache:  
-    description: "If true will store files that could be cached in $GITHUB_WORKSPACE/emsdk-master"
-    default: false
-  actions-cache-folder:
-    description: "Set to the folder where your cached emsdk-master folder is."
-    default: ''
-  
+version:
+  description: 'Version to install'
+  default: 'latest'
+no-install:
+  description: "If true will not download any version of Emscripten. emsdk will still be added to PATH."
+  default: false
+no-cache:
+  description: "If true will not cache any downloads with tc.cacheDir."
+  default: false
+store-actions-cache:
+  description: "Name of the folder emsdk cache will be copied to on sucessful run. This folder will go under $GITHUB_HOME (I.e. build dir)"
+  default: ''
+actions-cache-folder:
+  description: "Set to the folder where your cached emsdk-master folder is."
+  default: ''
 ```
 
 See [action.yml](action.yml)
