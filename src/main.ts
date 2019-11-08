@@ -21,8 +21,8 @@ async function run() {
     } 
     
     if (emArgs.actionsCacheFolder) {
+      core.debug("emsdkFolder set to provided folder");
       emsdkFolder = emArgs.actionsCacheFolder;
-      exec.exec("echo $GITHUB_WORKSPACE");
     }
 
     if (!emsdkFolder) {
