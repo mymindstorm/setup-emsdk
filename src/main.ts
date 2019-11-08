@@ -18,7 +18,9 @@ async function run() {
     
     if (emArgs.version !== "latest" && emArgs.noCache === "false") {
       emsdkFolder = await tc.find('emsdk', emArgs.version, os.arch());
-    } else if (emArgs.actionsCacheFolder) {
+    } 
+    
+    if (emArgs.actionsCacheFolder) {
       emsdkFolder = emArgs.actionsCacheFolder;
       exec.exec("echo $GITHUB_WORKSPACE");
     }
