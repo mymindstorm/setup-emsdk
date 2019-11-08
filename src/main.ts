@@ -2,6 +2,7 @@ import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 import * as tc from '@actions/tool-cache';
 import * as os from 'os';
+import * as fs from 'fs';
 
 async function run() {
   try {
@@ -10,7 +11,7 @@ async function run() {
       noInstall: await core.getInput("no-install"),
       noCache: await core.getInput("no-cache"),
       storeActionsCache: await core.getInput("store-actions-cache"),
-      actionsCacheFolder: await core.getInput("actions-cache-folder")
+      useActionsCacheFolder: await core.getInput("actions-cache-folder")
     };
 
     let emsdkFolder;
@@ -20,9 +21,14 @@ async function run() {
       emsdkFolder = await tc.find('emsdk', emArgs.version, os.arch());
     } 
     
-    if (emArgs.actionsCacheFolder) {
-      core.debug("GITHUB_WORKSPACE: " + process.env.GITHUB_WORKSPACE);
-      // emsdkFolder = emArgs.actionsCacheFolder;
+    if (emArgs.useActionsCacheFolder) {
+      const fullCachePath = `${process.env.GITHUB_WORKSPACE}/${emArgs.useActionsCacheFolder}`
+      try {
+        fs.accessSync(fullCachePath + '/emsdk-master/emsdk', fs.constants.X_OK)
+        emsdkFolder = fullCachePath;
+      } catch (e) {
+        core.error(`Could not access cached files at path: ${fullCachePath}`);
+      }
     }
 
     if (!emsdkFolder) {
@@ -77,6 +83,10 @@ async function run() {
         }
       }
     }})
+
+    if (emArgs.storeActionsCache) {
+      await exec.exec(`cp -r ${emsdkFolder}/emsdk-master ${process.env.GITHUB_WORKSPACE}/${emArgs.storeActionsCache}/`);
+    }
   } catch (error) {
     core.setFailed(error.message);
   }

@@ -12,8 +12,8 @@ inputs:
     description: "If true will not cache any downloads with tc.cacheDir."
     default: false
   store-actions-cache:
-    description: "If true will store files that could be cached in $GITHUB_WORKSPACE"
-    default: false
+    description: "Name of the folder emsdk cache will be copied to on sucessful run. This folder will go under $GITHUB_HOME (I.e. build dir)"
+    default: ''
   actions-cache-folder:
     description: "Set to the folder where your cached emsdk-master folder is."
     default: ''

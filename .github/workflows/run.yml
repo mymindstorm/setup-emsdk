@@ -12,24 +12,24 @@ jobs:
 
     - name: Verify
       run: emcc -v
-  actions-cache-test:
+  actions-use-cache-test:
     runs-on: ubuntu-latest
     steps:
+      - name: Cache emsdk
+        uses: actions/cache@v1
+        with:
+          path: emsdk-cache
+          key: ${{ runner.os }}-emsdk-1.38.40
       - uses: mymindstorm/setup-emsdk@actions-cache
+        if: steps.cache.outputs.cache-hit != 'true'
         with:
           version: 1.38.40
-          actions-cache-folder: 'use'
-
-      - name: Verify
-        run: emcc -v
-  no-cache-test:
-    runs-on: ubuntu-latest
-    steps:
+          store-actions-cache: 'emsdk-cache'
       - uses: mymindstorm/setup-emsdk@actions-cache
+        if: steps.cache.outputs.cache-hit = 'true'
         with:
           version: 1.38.40
-          no-cache: true
-
+          actions-cache-folder: 'emsdk-cache'
       - name: Verify
         run: emcc -v
   no-install:
