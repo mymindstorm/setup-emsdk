@@ -25,33 +25,27 @@ jobs:
   uses: actions/cache@v1
   id: cache # This is important!
   with:
-    # Set to the same folder as store-actions-cache (more below)
+    # Set to the same folder as actions-cache-folder (more below)
     path: 'emsdk-cache'
     # Set the end bit to emsdk version
     key: ${{ runner.os }}-emsdk-1.38.40
 
-- name: Setup emsdk (cache not found)
+- name: Setup emsdk (use cache if found, create otherwise)
   uses: mymindstorm/setup-emsdk@v2
-  if: steps.cache.outputs.cache-hit != 'true'
   with:
     # Make sure to set a version number!
     version: 1.38.40
     # This is the name of the cache folder.
     # The cache folder will be placed in the build directory,
     #  so make sure it doesn't conflict with anything!
-    store-actions-cache: 'emsdk-cache'
+    actions-cache-folder: 'emsdk-cache'
+    # If cache-hit evaluates to 'true', the 'actions/cache@v1' 
+    #  did find the cache and it is used as such. In any other
+    #  case, the data will instead be copied to the given
+    #  directory and automatically cached after the build
+    cache-hit: ${{steps.cache.outputs.cache-hit}}
     # This stops it from using tc.cacheDir since we are using
     #  actions/cache.
-    no-cache: true
-
-- name: Setup emsdk (cache found)        
-  uses: mymindstorm/setup-emsdk@v2
-  if: steps.cache.outputs.cache-hit == 'true'
-  with:
-    # Make sure to set a version number!
-    version: 1.38.40
-    # Set to the same folder as store-actions-cache
-    actions-cache-folder: 'emsdk-cache'
     no-cache: true
 
 - name: Verify
@@ -70,12 +64,12 @@ no-install:
 no-cache:
   description: "If true will not cache any downloads with tc.cacheDir."
   default: false
-store-actions-cache:
-  description: "Name of the folder emsdk cache will be copied to on sucessful run. This folder will go under $GITHUB_HOME (I.e. build dir)"
-  default: ''
 actions-cache-folder:
-  description: "Set to the folder where your cached emsdk-master folder is."
+  description: "Set to the folder where your cached emsdk-master folder is or where emsdk cache will be copied to on sucessful run. This folder will go under $GITHUB_HOME (I.e. build dir)."
   default: ''
+cache-hit:
+  description: "If true, assume that 'actions-cache-folder' containes the previously cached emsdk. If false (and 'actions-cache-folder' is set), the cache will be created instead."
+  default: 'false'
 ```
 
 See [action.yml](action.yml)
