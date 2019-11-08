@@ -24,12 +24,12 @@ async function run() {
     if (emArgs.useActionsCacheFolder) {
       const fullCachePath = `${process.env.GITHUB_WORKSPACE}/${emArgs.useActionsCacheFolder}`
       try {
-        fs.accessSync(fullCachePath + '/emsdk-master/emsdk');
+        fs.accessSync(fullCachePath + '/emsdk-master/emsdk', fs.constants.X_OK)
         emsdkFolder = fullCachePath;
         foundInCache = true;
       } catch (e) {
         core.error(`Could not access cached files at path: ${fullCachePath}`);
-        // core.debug(fs.readdirSync(fullCachePath).toString());
+        core.debug(fs.readdirSync(fullCachePath + '/emsdk-master').toString());
       }
     }
 
