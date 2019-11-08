@@ -8,7 +8,9 @@ async function run() {
     const emArgs = {
       version: await core.getInput("version"),
       noInstall: await core.getInput("no-install"),
-      noCache: await core.getInput("no-cache")
+      noCache: await core.getInput("no-cache"),
+      storeActionsCache: await core.getInput("store-actions-cache"),
+      actionsCacheFolder: await core.getInput("actions-cache-folder")
     };
 
     let emsdkFolder;
@@ -16,7 +18,10 @@ async function run() {
     
     if (emArgs.version !== "latest" && emArgs.noCache === "false") {
       emsdkFolder = await tc.find('emsdk', emArgs.version, os.arch());
-    } 
+    } else if (emArgs.actionsCacheFolder) {
+      emsdkFolder = emArgs.actionsCacheFolder;
+      exec.exec("echo $GITHUB_WORKSPACE");
+    }
 
     if (!emsdkFolder) {
       const emsdkArchive = await tc.downloadTool("https://github.com/emscripten-core/emsdk/archive/master.zip");

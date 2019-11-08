@@ -8,23 +8,24 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
-    - uses: mymindstorm/setup-emsdk@master
+    - uses: mymindstorm/setup-emsdk@actions-cache
 
     - name: Verify
       run: emcc -v
-  cache-test:
+  actions-cache-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: mymindstorm/setup-emsdk@master
+      - uses: mymindstorm/setup-emsdk@actions-cache
         with:
           version: 1.38.40
+          actions-cache-folder: "something"
 
       - name: Verify
         run: emcc -v
   no-cache-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: mymindstorm/setup-emsdk@master
+      - uses: mymindstorm/setup-emsdk@actions-cache
         with:
           version: 1.38.40
           no-cache: true
@@ -34,7 +35,7 @@ jobs:
   no-install:
     runs-on: ubuntu-latest
     steps:
-      - uses: mymindstorm/setup-emsdk@master
+      - uses: mymindstorm/setup-emsdk@actions-cache
         with:
           no-install: true
 
