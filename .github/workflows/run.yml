@@ -18,7 +18,7 @@ jobs:
       - uses: mymindstorm/setup-emsdk@actions-cache
         with:
           version: 1.38.40
-          actions-cache-folder: ${{ env.GITHUB_WORKSPACE }}
+          actions-cache-folder: 'use'
 
       - name: Verify
         run: emcc -v
