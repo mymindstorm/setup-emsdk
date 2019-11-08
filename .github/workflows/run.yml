@@ -8,33 +8,39 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
-    - uses: mymindstorm/setup-emsdk@master
+    - uses: mymindstorm/setup-emsdk@actions-cache
 
     - name: Verify
       run: emcc -v
-  cache-test:
+  actions-use-cache-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: mymindstorm/setup-emsdk@master
+      - name: Cache emsdk
+        uses: actions/cache@v1
+        id: cache
         with:
-          version: 1.38.40
-
-      - name: Verify
-        run: emcc -v
-  no-cache-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: mymindstorm/setup-emsdk@master
+          path: emsdk-cache
+          key: ${{ runner.os }}-emsdk-1.38.48
+      - name: Setup emsdk (cache not found)  
+        uses: mymindstorm/setup-emsdk@actions-cache
+        if: steps.cache.outputs.cache-hit != 'true'
         with:
-          version: 1.38.40
+          version: 1.38.48
+          store-actions-cache: 'emsdk-cache'
           no-cache: true
-
+      - name: Setup emsdk (cache found)        
+        uses: mymindstorm/setup-emsdk@actions-cache
+        if: steps.cache.outputs.cache-hit == 'true'
+        with:
+          version: 1.38.48
+          actions-cache-folder: 'emsdk-cache'
+          no-cache: true
       - name: Verify
         run: emcc -v
   no-install:
     runs-on: ubuntu-latest
     steps:
-      - uses: mymindstorm/setup-emsdk@master
+      - uses: mymindstorm/setup-emsdk@actions-cache
         with:
           no-install: true
 

@@ -9,8 +9,14 @@ inputs:
     description: "If true will not download any version of Emscripten. emsdk will still be added to PATH."
     default: false
   no-cache:
-    description: "If true will not cache any downloads."
+    description: "If true will not cache any downloads with tc.cacheDir."
     default: false
+  store-actions-cache:
+    description: "Name of the folder emsdk cache will be copied to on sucessful run. This folder will go under $GITHUB_HOME (I.e. build dir)"
+    default: ''
+  actions-cache-folder:
+    description: "Set to the folder where your cached emsdk-master folder is."
+    default: ''
 runs:
   using: 'node12'
   main: 'lib/main.js'
