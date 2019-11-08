@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache emsdk
+        id: cache
         uses: actions/cache@v1
         with:
           path: emsdk-cache
