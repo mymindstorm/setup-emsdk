@@ -16,22 +16,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cache emsdk
-        id: cache
         uses: actions/cache@v1
+        id: cache
         with:
           path: emsdk-cache
-          key: ${{ runner.os }}-emsdk-1.38.40
+          key: ${{ runner.os }}-emsdk-1.39.1
       - name: Setup emsdk (cache not found)  
         uses: mymindstorm/setup-emsdk@actions-cache
         if: steps.cache.outputs.cache-hit != 'true'
         with:
-          version: 1.38.40
+          version: 1.39.1
           store-actions-cache: 'emsdk-cache'
       - name: Setup emsdk (cache found)        
         uses: mymindstorm/setup-emsdk@actions-cache
         if: steps.cache.outputs.cache-hit == 'true'
         with:
-          version: 1.38.40
+          version: 1.39.1
           actions-cache-folder: 'emsdk-cache'
       - name: Verify
         run: emcc -v
