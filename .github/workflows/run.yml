@@ -20,7 +20,7 @@ jobs:
         id: cache
         with:
           path: emsdk-cache
-          key: ${{ runner.os }}-emsdk-${{ hashFiles('**/emsdk-cache')}}
+          key: ${{ runner.os }}-emsdk-1.39.1
       - name: Setup emsdk (cache not found)  
         uses: mymindstorm/setup-emsdk@actions-cache
         if: steps.cache.outputs.cache-hit != 'true'
