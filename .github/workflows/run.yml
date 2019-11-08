@@ -20,12 +20,14 @@ jobs:
         with:
           path: emsdk-cache
           key: ${{ runner.os }}-emsdk-1.38.40
-      - uses: mymindstorm/setup-emsdk@actions-cache
+      - name: Setup emsdk (cache not found)  
+        uses: mymindstorm/setup-emsdk@actions-cache
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           version: 1.38.40
           store-actions-cache: 'emsdk-cache'
-      - uses: mymindstorm/setup-emsdk@actions-cache
+      - name: Setup emsdk (cache found)        
+        uses: mymindstorm/setup-emsdk@actions-cache
         if: steps.cache.outputs.cache-hit == 'true'
         with:
           version: 1.38.40
