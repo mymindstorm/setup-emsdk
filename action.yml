@@ -11,11 +11,8 @@ inputs:
   no-cache:
     description: "If true will not cache any downloads with tc.cacheDir."
     default: false
-  store-actions-cache:
-    description: "Name of the folder emsdk cache will be copied to on sucessful run. This folder will go under $GITHUB_HOME (I.e. build dir)"
-    default: ''
   actions-cache-folder:
-    description: "Set to the folder where your cached emsdk-master folder is."
+    description: "Set to the folder where your cached emsdk-master folder is or where emsdk cache will be copied to on sucessful run. This folder will go under $GITHUB_HOME (I.e. build dir)."
     default: ''
 runs:
   using: 'node12'
