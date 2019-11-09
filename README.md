@@ -39,11 +39,6 @@ jobs:
     # The cache folder will be placed in the build directory,
     #  so make sure it doesn't conflict with anything!
     actions-cache-folder: 'emsdk-cache'
-    # If cache-hit evaluates to 'true', the 'actions/cache@v1' 
-    #  did find the cache and it is used as such. In any other
-    #  case, the data will instead be copied to the given
-    #  directory and automatically cached after the build
-    cache-hit: ${{steps.cache.outputs.cache-hit}}
     # This stops it from using tc.cacheDir since we are using
     #  actions/cache.
     no-cache: true
@@ -67,9 +62,6 @@ no-cache:
 actions-cache-folder:
   description: "Set to the folder where your cached emsdk-master folder is or where emsdk cache will be copied to on sucessful run. This folder will go under $GITHUB_HOME (I.e. build dir)."
   default: ''
-cache-hit:
-  description: "If true, assume that 'actions-cache-folder' containes the previously cached emsdk. If false (and 'actions-cache-folder' is set), the cache will be created instead."
-  default: 'false'
 ```
 
 See [action.yml](action.yml)

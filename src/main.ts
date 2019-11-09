@@ -10,8 +10,7 @@ async function run() {
       version: await core.getInput("version"),
       noInstall: await core.getInput("no-install"),
       noCache: await core.getInput("no-cache"),
-      actionsCacheFolder: await core.getInput("actions-cache-folder"),
-      cacheHit: await core.getInput("cache-hit"),
+      actionsCacheFolder: await core.getInput("actions-cache-folder")
     };
 
     let emsdkFolder;
@@ -21,14 +20,15 @@ async function run() {
       emsdkFolder = await tc.find('emsdk', emArgs.version, os.arch());
     } 
     
-    if (emArgs.actionsCacheFolder && emArgs.cacheHit == 'true') {
+    if (emArgs.actionsCacheFolder) {
       const fullCachePath = `${process.env.GITHUB_WORKSPACE}/${emArgs.actionsCacheFolder}`
       try {
         fs.accessSync(fullCachePath + '/emsdk-master/emsdk', fs.constants.X_OK)
         emsdkFolder = fullCachePath;
         foundInCache = true;
       } catch (e) {
-        core.error(`Could not access cached files at path: ${fullCachePath}`);
+        core.warning(`No cached files found at path "${fullCachePath}" - downloading and caching emsdk.`);
+        await exec.exec(`rm -rf ${fullCachePath}`);
         // core.debug(fs.readdirSync(fullCachePath + '/emsdk-master').toString());
       }
     }
@@ -86,7 +86,7 @@ async function run() {
       }
     }})
 
-    if (emArgs.actionsCacheFolder && emArgs.cacheHit != 'true') {
+    if (emArgs.actionsCacheFolder && !foundInCache) {
       fs.mkdirSync(`${process.env.GITHUB_WORKSPACE}/${emArgs.actionsCacheFolder}`, { recursive: true });
       await exec.exec(`cp -r ${emsdkFolder}/emsdk-master ${process.env.GITHUB_WORKSPACE}/${emArgs.actionsCacheFolder}`);
     }

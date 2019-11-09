@@ -26,7 +26,6 @@ jobs:
         with:
           version: 1.38.48
           actions-cache-folder: 'emsdk-cache'
-          cache-hit: ${{steps.cache.outputs.cache-hit}}
           no-cache: true
           
       - name: Verify
