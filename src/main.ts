@@ -10,7 +10,8 @@ async function run() {
       version: await core.getInput("version"),
       noInstall: await core.getInput("no-install"),
       noCache: await core.getInput("no-cache"),
-      actionsCacheFolder: await core.getInput("actions-cache-folder")
+      actionsCacheFolder: await core.getInput("actions-cache-folder"),
+      updateTags: await core.getInput("update-tags")
     };
 
     let emsdkFolder;
@@ -58,9 +59,13 @@ async function run() {
     }
 
     if (!foundInCache) {
+      if (emArgs.updateTags) {
+        await exec.exec(`${emsdk} update-tags`);
+      }
+
       await exec.exec(`${emsdk} install ${emArgs.version}`);
 
-      if (emArgs.version !== "latest" && emArgs.noCache === "false") {
+      if (emArgs.version !== "latest" && emArgs.version !== "tot" && emArgs.noCache === "false") {
         await tc.cacheDir(emsdkFolder, 'emsdk', emArgs.version, os.arch());
       }
     }

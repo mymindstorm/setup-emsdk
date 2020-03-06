@@ -39,3 +39,15 @@ jobs:
 
       - name: Verify
         run: emsdk list
+  tot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup emsdk (use cache if found, create otherwise)  
+        uses: mymindstorm/setup-emsdk@master
+        with:
+          version: tot
+          no-cache: true
+          update-tags: true
+          
+      - name: Verify
+        run: emcc -v

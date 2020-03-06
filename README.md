@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: mymindstorm/setup-emsdk@v2
+      - uses: mymindstorm/setup-emsdk@v4
 
       - name: Verify
         run: emcc -v
@@ -22,7 +22,7 @@ jobs:
 
 ```yaml
 - name: Cache emsdk
-  uses: actions/cache@v1
+  uses: actions/cache@v4
   id: cache # This is important!
   with:
     # Set to the same folder as actions-cache-folder (more below)
@@ -62,6 +62,9 @@ no-cache:
 actions-cache-folder:
   description: "Set to the folder where your cached emsdk-master folder is or where emsdk cache will be copied to on sucessful run. This folder will go under $GITHUB_HOME (I.e. build dir)."
   default: ''
+update-tags:
+  description: "Update tags before installing a version"
+  default: false
 ```
 
 See [action.yml](action.yml)

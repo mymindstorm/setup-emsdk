@@ -14,6 +14,9 @@ inputs:
   actions-cache-folder:
     description: "Set to the folder where your cached emsdk-master folder is or where emsdk cache will be copied to on sucessful run. This folder will go under $GITHUB_HOME (I.e. build dir)."
     default: ''
+  update-tags:
+    description: "Update tags before installing a version"
+    default: false
 runs:
   using: 'node12'
   main: 'lib/main.js'

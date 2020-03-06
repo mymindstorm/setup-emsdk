@@ -25,7 +25,6 @@
   },
   "devDependencies": {
     "@types/node": "^12.0.4",
-    "jest-circus": "^24.7.1",
     "typescript": "^3.5.1"
   }
 }
