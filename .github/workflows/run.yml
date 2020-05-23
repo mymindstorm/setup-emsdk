@@ -15,17 +15,11 @@ jobs:
   actions-use-cache-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Cache emsdk
-        uses: actions/cache@v1
-        id: cache
-        with:
-          path: emsdk-cache
-          key: ${{ runner.os }}-emsdk-1.38.48
       - name: Setup emsdk (use cache if found, create otherwise)  
         uses: mymindstorm/setup-emsdk@master
         with:
           version: 1.38.48
-          actions-cache-folder: 'emsdk-cache'
+          actions-cache-folder: 'emsdk-cache-folder'
           no-cache: true
           
       - name: Verify
