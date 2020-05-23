@@ -12,7 +12,7 @@ inputs:
     description: "If true will not cache any downloads with tc.cacheDir."
     default: false
   actions-cache-folder:
-    description: "Set to the folder where your cached emsdk-master folder is or where emsdk cache will be copied to on sucessful run. This folder will go under $GITHUB_HOME (I.e. build dir)."
+    description: "Directory to cache emsdk in. This folder will go under $GITHUB_HOME (I.e. build dir) and be cached using @actions/cahce."
     default: ''
   update-tags:
     description: "Update tags before installing a version"

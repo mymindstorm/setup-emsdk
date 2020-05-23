@@ -18,7 +18,7 @@ async function run() {
     let emsdkFolder;
     let foundInCache = false;
     
-    if (emArgs.version !== "latest" && emArgs.noCache === "false") {
+    if (emArgs.version !== "latest" && emArgs.noCache === "false" && !emArgs.actionsCacheFolder) {
       emsdkFolder = await tc.find('emsdk', emArgs.version, os.arch());
     } 
     
@@ -68,7 +68,7 @@ async function run() {
 
       await exec.exec(`${emsdk} install ${emArgs.version}`);
 
-      if (emArgs.version !== "latest" && emArgs.version !== "tot" && emArgs.noCache === "false") {
+      if (emArgs.version !== "latest" && emArgs.version !== "tot" && emArgs.noCache === "false" && !emArgs.actionsCacheFolder) {
         await tc.cacheDir(emsdkFolder, 'emsdk', emArgs.version, os.arch());
       }
     }
