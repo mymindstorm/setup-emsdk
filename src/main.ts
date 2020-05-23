@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 import * as tc from '@actions/tool-cache';
+import * as cache from '@actions/cache';
 import * as os from 'os';
 import * as fs from 'fs';
 
@@ -21,10 +22,12 @@ async function run() {
       emsdkFolder = await tc.find('emsdk', emArgs.version, os.arch());
     } 
     
+    const cacheKey = `${emArgs.version}-${os.arch()}`;
     if (emArgs.actionsCacheFolder) {
-      const fullCachePath = `${process.env.GITHUB_WORKSPACE}/${emArgs.actionsCacheFolder}`
+      const fullCachePath = `${process.env.GITHUB_WORKSPACE}/${emArgs.actionsCacheFolder}`;
       try {
-        fs.accessSync(fullCachePath + '/emsdk-master/emsdk', fs.constants.X_OK)
+        await cache.restoreCache([emArgs.actionsCacheFolder], cacheKey);
+        fs.accessSync(fullCachePath + '/emsdk-master/emsdk', fs.constants.X_OK);
         emsdkFolder = fullCachePath;
         foundInCache = true;
       } catch (e) {
@@ -94,6 +97,7 @@ async function run() {
     if (emArgs.actionsCacheFolder && !foundInCache) {
       fs.mkdirSync(`${process.env.GITHUB_WORKSPACE}/${emArgs.actionsCacheFolder}`, { recursive: true });
       await exec.exec(`cp -r ${emsdkFolder}/emsdk-master ${process.env.GITHUB_WORKSPACE}/${emArgs.actionsCacheFolder}`);
+      await cache.saveCache([emArgs.actionsCacheFolder], cacheKey);
     }
   } catch (error) {
     core.setFailed(error.message);
