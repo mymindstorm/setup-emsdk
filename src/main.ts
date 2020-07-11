@@ -75,7 +75,7 @@ async function run() {
 
     await exec.exec(`${emsdk} activate ${emArgs.version}`);
     await exec.exec(`${emsdk} construct_env`, [], {listeners: {
-      stdline(message) {
+      errline(message) {
         const pathRegex = new RegExp(/PATH \+= (\S+)/)
         const pathResult = pathRegex.exec(message);
 
