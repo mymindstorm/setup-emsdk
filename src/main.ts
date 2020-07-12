@@ -74,25 +74,24 @@ async function run() {
     }
 
     await exec.exec(`${emsdk} activate ${emArgs.version}`);
-    await exec.exec(`${emsdk} construct_env`, [], {listeners: {
-      stdline(message) {
-        const pathRegex = new RegExp(/PATH \+= (\S+)/)
-        const pathResult = pathRegex.exec(message);
+    const envListener = (message) => {
+      const pathRegex = new RegExp(/PATH \+= (\S+)/)
+      const pathResult = pathRegex.exec(message);
 
-        if (pathResult) {
-          core.addPath(pathResult[1]);
-          return;
-        }
-        
-        const envRegex = new RegExp(/(\S+) = (\S+)/);
-        const envResult = envRegex.exec(message);
-
-        if (envResult) {
-          core.exportVariable(envResult[1], envResult[2]);
-          return;
-        }
+      if (pathResult) {
+        core.addPath(pathResult[1]);
+        return;
       }
-    }})
+
+      const envRegex = new RegExp(/(\S+) = (\S+)/);
+      const envResult = envRegex.exec(message);
+
+      if (envResult) {
+        core.exportVariable(envResult[1], envResult[2]);
+        return;
+      }
+    };
+    await exec.exec(`${emsdk} construct_env`, [], {listeners: {stdline: envListener, errline: envListener}})
 
     if (emArgs.actionsCacheFolder && !foundInCache) {
       fs.mkdirSync(`${process.env.GITHUB_WORKSPACE}/${emArgs.actionsCacheFolder}`, { recursive: true });
