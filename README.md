@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: mymindstorm/setup-emsdk@v5
+      - uses: mymindstorm/setup-emsdk@v6
 
       - name: Verify
         run: emcc -v
@@ -20,9 +20,11 @@ jobs:
 
 ## Cache
 
+To just cache emsdk:
+
 ```yaml
 - name: Setup emsdk
-  uses: mymindstorm/setup-emsdk@v5
+  uses: mymindstorm/setup-emsdk@v6
   with:
     # Make sure to set a version number!
     version: 1.38.40
@@ -33,6 +35,34 @@ jobs:
 
 - name: Verify
   run: emcc -v
+```
+
+If you want to also cache system libraries generated during build time:
+
+```yaml
+env:
+  EM_VERSION: 1.39.18
+  EM_CACHE_FOLDER: 'emsdk-cache'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup cache
+        id: cache-system-libraries
+        uses: actions/cache@v2
+        with:
+          path: ${{env.EM_CACHE_FOLDER}}
+          key: ${{env.EM_VERSION}}-${{ runner.os }}
+      - uses: mymindstorm/setup-emsdk@v6
+        with:
+          version: ${{env.EM_VERSION}}
+          actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
+      - name: Build library
+        run: make -j2
+      - name: Run unit tests
+        run: make check
 ```
 
 ## Options
