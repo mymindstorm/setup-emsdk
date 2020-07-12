@@ -26,11 +26,15 @@ async function run() {
     if (emArgs.actionsCacheFolder) {
       const fullCachePath = `${process.env.GITHUB_WORKSPACE}/${emArgs.actionsCacheFolder}`;
       try {
-        await cache.restoreCache([emArgs.actionsCacheFolder], cacheKey);
+        try {
+         fs.accessSync(fullCachePath + '/emsdk-master/emsdk', fs.constants.X_OK);
+        } catch {
+          await cache.restoreCache([emArgs.actionsCacheFolder], cacheKey);
+        }
         fs.accessSync(fullCachePath + '/emsdk-master/emsdk', fs.constants.X_OK);
         emsdkFolder = fullCachePath;
         foundInCache = true;
-      } catch (e) {
+      } catch {
         core.warning(`No cached files found at path "${fullCachePath}" - downloading and caching emsdk.`);
         await exec.exec(`rm -rf ${fullCachePath}`);
         // core.debug(fs.readdirSync(fullCachePath + '/emsdk-master').toString());
