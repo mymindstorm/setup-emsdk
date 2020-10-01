@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: mymindstorm/setup-emsdk@v6
+      - uses: mymindstorm/setup-emsdk@v7
 
       - name: Verify
         run: emcc -v
@@ -24,7 +24,7 @@ To just cache emsdk:
 
 ```yaml
 - name: Setup emsdk
-  uses: mymindstorm/setup-emsdk@v6
+  uses: mymindstorm/setup-emsdk@v7
   with:
     # Make sure to set a version number!
     version: 1.38.40
@@ -55,7 +55,7 @@ jobs:
         with:
           path: ${{env.EM_CACHE_FOLDER}}
           key: ${{env.EM_VERSION}}-${{ runner.os }}
-      - uses: mymindstorm/setup-emsdk@v6
+      - uses: mymindstorm/setup-emsdk@v7
         with:
           version: ${{env.EM_VERSION}}
           actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
