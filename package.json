@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "Github action to download and setup Emscripten",
-  "main": "lib/main.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc && ncc build lib/main.js --license licenses.txt"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/node": "^12.12.62",
+    "@vercel/ncc": "^0.24.1",
     "typescript": "^3.9.7"
   }
 }
