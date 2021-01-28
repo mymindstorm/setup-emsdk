@@ -5,7 +5,8 @@
   "description": "Github action to download and setup Emscripten",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc && ncc build lib/main.js --license licenses.txt"
+    "build": "tsc && ncc build lib/main.js --license licenses.txt",
+    "test": "ava"
   },
   "repository": {
     "type": "git",
