@@ -42,6 +42,7 @@ const tc = __importStar(__webpack_require__(7784));
 const cache = __importStar(__webpack_require__(7799));
 const os = __importStar(__webpack_require__(2087));
 const fs = __importStar(__webpack_require__(5747));
+const matchers_1 = __webpack_require__(964);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -110,14 +111,12 @@ function run() {
             }
             yield exec.exec(`${emsdk} activate ${emArgs.version}`);
             const envListener = (message) => {
-                const pathRegex = new RegExp(/PATH \+= (\S+)/);
-                const pathResult = pathRegex.exec(message);
+                const pathResult = matchers_1.pathRegex.exec(message);
                 if (pathResult) {
                     core.addPath(pathResult[1]);
                     return;
                 }
-                const envRegex = new RegExp(/(\S+) = (\S+)/);
-                const envResult = envRegex.exec(message);
+                const envResult = matchers_1.envRegex.exec(message);
                 if (envResult) {
                     core.exportVariable(envResult[1], envResult[2]);
                     return;
@@ -136,6 +135,19 @@ function run() {
     });
 }
 run();
+
+
+/***/ }),
+
+/***/ 964:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.envRegex = exports.pathRegex = void 0;
+exports.pathRegex = new RegExp(/PATH \+= (.+)/);
+exports.envRegex = new RegExp(/(\S+) = (.+)/);
 
 
 /***/ }),
