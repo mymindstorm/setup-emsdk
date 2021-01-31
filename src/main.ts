@@ -4,6 +4,7 @@ import * as tc from '@actions/tool-cache';
 import * as cache from '@actions/cache';
 import * as os from 'os';
 import * as fs from 'fs';
+import { envRegex, pathRegex } from './matchers'
 
 async function run() {
   try {
@@ -79,7 +80,6 @@ async function run() {
 
     await exec.exec(`${emsdk} activate ${emArgs.version}`);
     const envListener = (message) => {
-      const pathRegex = new RegExp(/PATH \+= (\S+)/)
       const pathResult = pathRegex.exec(message);
 
       if (pathResult) {
@@ -87,7 +87,6 @@ async function run() {
         return;
       }
 
-      const envRegex = new RegExp(/(\S+) = (\S+)/);
       const envResult = envRegex.exec(message);
 
       if (envResult) {
