@@ -1,0 +1,17 @@
+2021-01-27T15:02:07.0389115Z [command]/home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/emsdk construct_env
+2021-01-27T15:02:07.3182235Z Adding directories to PATH:
+2021-01-27T15:02:07.3212881Z PATH += /home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master
+2021-01-27T15:02:07.3214075Z PATH += /home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/upstream/emscripten
+2021-01-27T15:02:07.3215187Z PATH += /home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/node/12.18.1_64bit/bin
+2021-01-27T15:02:07.3215679Z 
+2021-01-27T15:02:07.3216086Z Setting environment variables:
+2021-01-27T15:02:07.3219093Z PATH = /home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master:/home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/upstream/emscripten:/home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/node/12.18.1_64bit/bin:/opt/hostedtoolcache/Python/3.9.1/x64/bin:/opt/hostedtoolcache/Python/3.9.1/x64:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/opt/pipx_bin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+2021-01-27T15:02:07.3221760Z EMSDK = /home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master
+2021-01-27T15:02:07.3222742Z EM_CONFIG = /home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/.emscripten
+2021-01-27T15:02:07.3223861Z EM_CACHE = /home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/upstream/emscripten/cache
+2021-01-27T15:02:07.3224981Z EMSDK_NODE = /home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/node/12.18.1_64bit/bin/node
+2021-01-27T15:02:07.3228128Z export PATH="/home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master:/home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/upstream/emscripten:/home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/node/12.18.1_64bit/bin:/opt/hostedtoolcache/Python/3.9.1/x64/bin:/opt/hostedtoolcache/Python/3.9.1/x64:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/opt/pipx_bin:/usr/share/rust/.cargo/bin:/home/runner/.config/composer/vendor/bin:/home/runner/.dotnet/tools:/snap/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+2021-01-27T15:02:07.3230810Z export EMSDK="/home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master"
+2021-01-27T15:02:07.3231897Z export EM_CONFIG="/home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/.emscripten"
+2021-01-27T15:02:07.3233113Z export EM_CACHE="/home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/upstream/emscripten/cache"
+2021-01-27T15:02:07.3234826Z export EMSDK_NODE="/home/runner/work/_temp/6a767501-69b6-4276-97a0-bbe02917a6db/emsdk-master/node/12.18.1_64bit/bin/node"
