@@ -20,3 +20,6 @@ jobs:
         || (echo "##[error] found changed files after build. please 'npm run build && npm run format'" \
                  "and check in all changes" \
             && exit 1)
+
+    - name: "npm test"
+      run: npm test
