@@ -20,16 +20,17 @@
   "author": "mymindstorm",
   "license": "MIT",
   "dependencies": {
-    "@actions/cache": "^0.2.1",
-    "@actions/core": "^1.2.6",
+    "@actions/cache": "^1.0.7",
+    "@actions/core": "^1.2.7",
     "@actions/exec": "^1.0.4",
-    "@actions/tool-cache": "^1.6.0"
+    "@actions/io": "^1.1.0",
+    "@actions/tool-cache": "^1.6.1"
   },
   "devDependencies": {
-    "@types/node": "^12.12.62",
+    "@types/node": "^12.20.11",
     "@vercel/ncc": "^0.24.1",
     "ava": "^3.15.0",
     "ts-node": "^9.1.1",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.9"
   }
 }

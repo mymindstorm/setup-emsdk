@@ -2,8 +2,10 @@ import * as core from '@actions/core';
 import * as exec from '@actions/exec';
 import * as tc from '@actions/tool-cache';
 import * as cache from '@actions/cache';
+import * as io from '@actions/io';
 import * as os from 'os';
 import * as fs from 'fs';
+import * as path from 'path';
 import { envRegex, pathRegex } from './matchers'
 
 async function run() {
@@ -19,25 +21,25 @@ async function run() {
     let emsdkFolder;
     let foundInCache = false;
     
-    if (emArgs.version !== "latest" && emArgs.noCache === "false" && !emArgs.actionsCacheFolder) {
+    if (emArgs.version !== "latest" && emArgs.version !== "tot" && emArgs.noCache === "false" && !emArgs.actionsCacheFolder) {
       emsdkFolder = await tc.find('emsdk', emArgs.version, os.arch());
     } 
     
     const cacheKey = `${emArgs.version}-${os.arch()}`;
-    if (emArgs.actionsCacheFolder) {
-      const fullCachePath = `${process.env.GITHUB_WORKSPACE}/${emArgs.actionsCacheFolder}`;
+    if (emArgs.actionsCacheFolder && process.env.GITHUB_WORKSPACE) {
+      const fullCachePath = path.join(process.env.GITHUB_WORKSPACE, emArgs.actionsCacheFolder);
       try {
         try {
-         fs.accessSync(fullCachePath + '/emsdk-master/emsdk', fs.constants.X_OK);
+         fs.accessSync(path.join(fullCachePath, 'emsdk-master', 'emsdk'), fs.constants.X_OK);
         } catch {
           await cache.restoreCache([emArgs.actionsCacheFolder], cacheKey);
         }
-        fs.accessSync(fullCachePath + '/emsdk-master/emsdk', fs.constants.X_OK);
+        fs.accessSync(path.join(fullCachePath, 'emsdk-master', 'emsdk'), fs.constants.X_OK);
         emsdkFolder = fullCachePath;
         foundInCache = true;
       } catch {
         core.warning(`No cached files found at path "${fullCachePath}" - downloading and caching emsdk.`);
-        await exec.exec(`rm -rf ${fullCachePath}`);
+        await io.rmRF(fullCachePath);
         // core.debug(fs.readdirSync(fullCachePath + '/emsdk-master').toString());
       }
     }
@@ -49,20 +51,15 @@ async function run() {
       foundInCache = true;
     }
 
-    let emsdk = `${emsdkFolder}/emsdk-master/emsdk`
+    let emsdk = path.join(emsdkFolder, 'emsdk-master', 'emsdk');
 
     if (os.platform() === "win32") {
-      emsdk = `powershell ${emsdkFolder}\\emsdk-master\\emsdk.ps1`
+      emsdk = `powershell ${path.join(emsdkFolder, 'emsdk-master', 'emsdk.ps1')}`;
     }
 
     if (emArgs.noInstall === "true") {
-      if (os.platform() === "win32") {
-        core.addPath(`${emsdkFolder}\\emsdk-master`);
-        core.exportVariable("EMSDK", `${emsdkFolder}\\emsdk-master`);
-      } else {
-        core.addPath(`${emsdkFolder}/emsdk-master`);
-        core.exportVariable("EMSDK", `${emsdkFolder}/emsdk-master`);
-      }
+      core.addPath(path.join(emsdkFolder, 'emsdk-master'));
+      core.exportVariable("EMSDK", path.join(emsdkFolder, 'emsdk-master'));
       return;
     }
 
@@ -96,9 +93,9 @@ async function run() {
     };
     await exec.exec(`${emsdk} construct_env`, [], {listeners: {stdline: envListener, errline: envListener}})
 
-    if (emArgs.actionsCacheFolder && !foundInCache) {
-      fs.mkdirSync(`${process.env.GITHUB_WORKSPACE}/${emArgs.actionsCacheFolder}`, { recursive: true });
-      await exec.exec(`cp -r ${emsdkFolder}/emsdk-master ${process.env.GITHUB_WORKSPACE}/${emArgs.actionsCacheFolder}`);
+    if (emArgs.actionsCacheFolder && !foundInCache && process.env.GITHUB_WORKSPACE) {
+      fs.mkdirSync(path.join(process.env.GITHUB_WORKSPACE, emArgs.actionsCacheFolder), { recursive: true });
+      await io.cp(path.join(emsdkFolder, 'emsdk-master'), path.join(process.env.GITHUB_WORKSPACE, emArgs.actionsCacheFolder), { recursive: true })
       await cache.saveCache([emArgs.actionsCacheFolder], cacheKey);
     }
   } catch (error) {
