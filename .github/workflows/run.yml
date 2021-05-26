@@ -18,7 +18,7 @@ jobs:
       - name: Setup emsdk (use cache if found, create otherwise)  
         uses: mymindstorm/setup-emsdk@master
         with:
-          version: 1.38.48
+          version: 20.0.20
           actions-cache-folder: 'emsdk-cache-folder'
           no-cache: true
           
