@@ -59,7 +59,7 @@ function run() {
             if (emArgs.version !== "latest" && emArgs.version !== "tot" && emArgs.noCache === "false" && !emArgs.actionsCacheFolder) {
                 emsdkFolder = yield tc.find('emsdk', emArgs.version, os.arch());
             }
-            const cacheKey = `${emArgs.version}-${os.arch()}`;
+            const cacheKey = `${emArgs.version}-${os.arch()}-master`;
             if (emArgs.actionsCacheFolder && process.env.GITHUB_WORKSPACE) {
                 const fullCachePath = path.join(process.env.GITHUB_WORKSPACE, emArgs.actionsCacheFolder);
                 try {

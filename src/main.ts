@@ -25,7 +25,7 @@ async function run() {
       emsdkFolder = await tc.find('emsdk', emArgs.version, os.arch());
     }
 
-    const cacheKey = `${emArgs.version}-${os.arch()}`;
+    const cacheKey = `${emArgs.version}-${os.arch()}-master`;
     if (emArgs.actionsCacheFolder && process.env.GITHUB_WORKSPACE) {
       const fullCachePath = path.join(process.env.GITHUB_WORKSPACE, emArgs.actionsCacheFolder);
       try {
