@@ -45,3 +45,13 @@ jobs:
           
       - name: Verify
         run: emcc -v
+  version-only:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v9
+        with:
+          version: 2.0.24
+          
+      - name: Verify
+        run: emcc -v
