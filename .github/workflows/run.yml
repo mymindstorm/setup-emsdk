@@ -52,7 +52,7 @@ jobs:
         uses: mymindstorm/setup-emsdk@v9
         with:
           version: 2.0.24
-          noCache: true
+          no-cache: true
           
       - name: Verify
         run: emcc -v
