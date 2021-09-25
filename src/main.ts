@@ -65,7 +65,7 @@ async function run() {
 
     if (!foundInCache) {
       if (emArgs.updateTags) {
-        await exec.exec(`${emsdk} update-tags`);
+        await exec.exec(`${emsdk} update`);
       }
 
       await exec.exec(`${emsdk} install ${emArgs.version}`);
