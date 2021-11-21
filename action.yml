@@ -12,10 +12,13 @@ inputs:
     description: "If true will not cache any downloads with tc.cacheDir."
     default: false
   actions-cache-folder:
-    description: "Directory to cache emsdk in. This folder will go under $GITHUB_HOME (I.e. build dir) and be cached using @actions/cahce."
+    description: "Directory to cache emsdk in. This folder will go under $GITHUB_HOME (I.e. build dir) and be cached using @actions/cache."
     default: ''
+  update:
+    description: "Fetch package information for all the new tools and SDK versions"
+    default: false
   update-tags:
-    description: "Update tags before installing a version"
+    description: "Deprecated in favor of `update`."
     default: false
 runs:
   using: 'node12'

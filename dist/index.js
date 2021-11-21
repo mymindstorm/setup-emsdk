@@ -52,7 +52,8 @@ function run() {
                 noInstall: yield core.getInput("no-install"),
                 noCache: yield core.getInput("no-cache"),
                 actionsCacheFolder: yield core.getInput("actions-cache-folder"),
-                updateTags: yield core.getInput("update-tags")
+                // XXX: update-tags is deprecated and used for backwards compatibility.
+                update: (yield core.getInput("update")) || (yield core.getInput("update-tags"))
             };
             let emsdkFolder;
             let foundInCache = false;
@@ -96,8 +97,8 @@ function run() {
                 return;
             }
             if (!foundInCache) {
-                if (emArgs.updateTags) {
-                    yield exec.exec(`${emsdk} update-tags`);
+                if (emArgs.update) {
+                    yield exec.exec(`${emsdk} update`);
                 }
                 yield exec.exec(`${emsdk} install ${emArgs.version}`);
                 if (emArgs.version !== "latest" && emArgs.version !== "tot" && emArgs.noCache === "false" && !emArgs.actionsCacheFolder) {

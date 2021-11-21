@@ -12,7 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: mymindstorm/setup-emsdk@v9
+      - uses: mymindstorm/setup-emsdk@v11
 
       - name: Verify
         run: emcc -v
@@ -24,7 +24,7 @@ To just cache emsdk:
 
 ```yaml
 - name: Setup emsdk
-  uses: mymindstorm/setup-emsdk@v9
+  uses: mymindstorm/setup-emsdk@v11
   with:
     # Make sure to set a version number!
     version: 1.38.40
@@ -55,7 +55,7 @@ jobs:
         with:
           path: ${{env.EM_CACHE_FOLDER}}
           key: ${{env.EM_VERSION}}-${{ runner.os }}
-      - uses: mymindstorm/setup-emsdk@v9
+      - uses: mymindstorm/setup-emsdk@v11
         with:
           version: ${{env.EM_VERSION}}
           actions-cache-folder: ${{env.EM_CACHE_FOLDER}}
@@ -80,8 +80,8 @@ no-cache:
 actions-cache-folder:
   description: "Directory to cache emsdk in. This folder will go under $GITHUB_HOME (I.e. build dir) and be cached using @actions/cache."
   default: ''
-update-tags:
-  description: "Update tags before installing a version"
+update:
+  description: "Fetch package information for all the new tools and SDK versions"
   default: false
 ```
 

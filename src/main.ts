@@ -15,7 +15,8 @@ async function run() {
       noInstall: await core.getInput("no-install"),
       noCache: await core.getInput("no-cache"),
       actionsCacheFolder: await core.getInput("actions-cache-folder"),
-      updateTags: await core.getInput("update-tags")
+      // XXX: update-tags is deprecated and used for backwards compatibility.
+      update: await core.getInput("update") || await core.getInput("update-tags")
     };
 
     let emsdkFolder;
@@ -64,7 +65,7 @@ async function run() {
     }
 
     if (!foundInCache) {
-      if (emArgs.updateTags) {
+      if (emArgs.update) {
         await exec.exec(`${emsdk} update`);
       }
 
