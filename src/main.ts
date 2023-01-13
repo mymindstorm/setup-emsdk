@@ -100,7 +100,15 @@ async function run() {
       await cache.saveCache([emArgs.actionsCacheFolder], cacheKey);
     }
   } catch (error) {
-    core.setFailed(error.message);
+    if (error && 
+      typeof error === "object" &&
+      "message" in error &&
+      (
+        typeof error.message === "string" ||
+        error.message instanceof Error
+      )) {
+      core.setFailed(error.message);
+    }
   }
 }
 
