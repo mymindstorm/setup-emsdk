@@ -27,7 +27,7 @@
     "@actions/tool-cache": "^1.6.1"
   },
   "devDependencies": {
-    "@types/node": "^18.11.18",
+    "@types/node": "^20.11.5",
     "@vercel/ncc": "^0.36.0",
     "ava": "^3.15.0",
     "ts-node": "^10.9.1",
