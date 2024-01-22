@@ -14,6 +14,9 @@ inputs:
   actions-cache-folder:
     description: "Directory to cache emsdk in. This folder will go under $GITHUB_HOME (I.e. build dir) and be cached using @actions/cache."
     default: ''
+  cache-key:
+    description: "Override the cache key. By default, it is `{Github workflow name}-{Emscripten version}-{OS type}-${CPU architecture}`."
+    default: ''
   update:
     description: "Fetch package information for all the new tools and SDK versions"
     default: false

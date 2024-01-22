@@ -56,6 +56,7 @@ function run() {
                 noInstall: yield core.getInput("no-install"),
                 noCache: yield core.getInput("no-cache"),
                 actionsCacheFolder: yield core.getInput("actions-cache-folder"),
+                cacheKey: yield core.getInput("cache-key"),
                 // XXX: update-tags is deprecated and used for backwards compatibility.
                 update: (yield core.getInput("update")) || (yield core.getInput("update-tags"))
             };
@@ -64,7 +65,7 @@ function run() {
             if (emArgs.version !== "latest" && emArgs.version !== "tot" && emArgs.noCache === "false" && !emArgs.actionsCacheFolder) {
                 emsdkFolder = yield tc.find('emsdk', emArgs.version, os.arch());
             }
-            const cacheKey = `${emArgs.version}-${os.platform()}-${os.arch()}-master`;
+            const cacheKey = emArgs.cacheKey || `${process.env.GITHUB_WORKFLOW}-${emArgs.version}-${os.platform()}-${os.arch()}`;
             if (emArgs.actionsCacheFolder && process.env.GITHUB_WORKSPACE) {
                 const fullCachePath = path.join(process.env.GITHUB_WORKSPACE, emArgs.actionsCacheFolder);
                 try {

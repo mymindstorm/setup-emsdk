@@ -15,6 +15,7 @@ async function run() {
       noInstall: await core.getInput("no-install"),
       noCache: await core.getInput("no-cache"),
       actionsCacheFolder: await core.getInput("actions-cache-folder"),
+      cacheKey: await core.getInput("cache-key"),
       // XXX: update-tags is deprecated and used for backwards compatibility.
       update: await core.getInput("update") || await core.getInput("update-tags")
     };
@@ -26,7 +27,7 @@ async function run() {
       emsdkFolder = await tc.find('emsdk', emArgs.version, os.arch());
     }
 
-    const cacheKey = `${emArgs.version}-${ os.platform() }-${os.arch()}-master`;
+    const cacheKey = emArgs.cacheKey || `${process.env.GITHUB_WORKFLOW}-${emArgs.version}-${os.platform()}-${os.arch()}`;
     if (emArgs.actionsCacheFolder && process.env.GITHUB_WORKSPACE) {
       const fullCachePath = path.join(process.env.GITHUB_WORKSPACE, emArgs.actionsCacheFolder);
       try {
@@ -100,7 +101,7 @@ async function run() {
       await cache.saveCache([emArgs.actionsCacheFolder], cacheKey);
     }
   } catch (error) {
-    if (error && 
+    if (error &&
       typeof error === "object" &&
       "message" in error &&
       (
