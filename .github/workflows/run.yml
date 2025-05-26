@@ -8,7 +8,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
-    - uses: mymindstorm/setup-emsdk@master
+    - uses: agriyakhetarpal/setup-emsdk@update-to-cache-v4
 
     - name: Verify
       run: emcc -v
@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup emsdk (use cache if found, create otherwise)
-        uses: ./action.yml
+        uses: agriyakhetarpal/setup-emsdk@update-to-cache-v4
         with:
           version: 4.0.9
           actions-cache-folder: 'emsdk-cache-folder'
@@ -27,7 +27,7 @@ jobs:
   no-install:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./action.yml
+      - uses: agriyakhetarpal/setup-emsdk@update-to-cache-v4
         with:
           no-install: true
 
@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup emsdk (use cache if found, create otherwise)
-        uses: action.yml
+        uses: agriyakhetarpal/setup-emsdk@update-to-cache-v4
         with:
           version: tot
           no-cache: true
