@@ -1,8 +1,5 @@
 name: "Run"
-on:
-  push:
-    branches:
-      - "master"
+on: [pull_request, push]
 
 jobs:
   defaults:
@@ -19,9 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup emsdk (use cache if found, create otherwise)
-        uses: mymindstorm/setup-emsdk@master
+        uses: ./action.yml
         with:
-          version: 2.0.20
+          version: 4.0.9
           actions-cache-folder: 'emsdk-cache-folder'
           no-cache: true
 
@@ -30,7 +27,7 @@ jobs:
   no-install:
     runs-on: ubuntu-latest
     steps:
-      - uses: mymindstorm/setup-emsdk@master
+      - uses: ./action.yml
         with:
           no-install: true
 
@@ -40,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup emsdk (use cache if found, create otherwise)
-        uses: mymindstorm/setup-emsdk@master
+        uses: action.yml
         with:
           version: tot
           no-cache: true
