@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup emsdk (use cache if found, create otherwise)
-    - uses: mymindstorm/setup-emsdk@master
+        uses: mymindstorm/setup-emsdk@master
         with:
           version: 4.0.9
           actions-cache-folder: 'emsdk-cache-folder'
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup emsdk (use cache if found, create otherwise)
-        - uses: mymindstorm/setup-emsdk@master
+      uses: mymindstorm/setup-emsdk@master
         with:
           version: tot
           no-cache: true
