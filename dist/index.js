@@ -40547,12 +40547,12 @@ function io_cp(source_1, dest_1) {
  */
 function mv(source_1, dest_1) {
     return io_awaiter(this, arguments, void 0, function* (source, dest, options = {}) {
-        if (yield ioUtil.exists(dest)) {
+        if (yield exists(dest)) {
             let destExists = true;
-            if (yield ioUtil.isDirectory(dest)) {
+            if (yield isDirectory(dest)) {
                 // If dest is directory copy src into dest
-                dest = path.join(dest, path.basename(source));
-                destExists = yield ioUtil.exists(dest);
+                dest = external_path_.join(dest, external_path_.basename(source));
+                destExists = yield exists(dest);
             }
             if (destExists) {
                 if (options.force == null || options.force) {
@@ -40563,8 +40563,8 @@ function mv(source_1, dest_1) {
                 }
             }
         }
-        yield mkdirP(path.dirname(dest));
-        yield ioUtil.rename(source, dest);
+        yield mkdirP(external_path_.dirname(dest));
+        yield rename(source, dest);
     });
 }
 /**
@@ -87093,24 +87093,38 @@ const envRegex = new RegExp(/(\S+) = (.+)/);
 async function run() {
     try {
         const emArgs = {
-            version: await getInput("version"),
-            noInstall: await getInput("no-install"),
-            noCache: await getInput("no-cache"),
-            actionsCacheFolder: await getInput("actions-cache-folder"),
-            cacheKey: await getInput("cache-key"),
+            version: getInput("version"),
+            emsdkVersion: getInput("emsdk-version"),
+            noInstall: getBooleanInput("no-install"),
+            noCache: getBooleanInput("no-cache"),
+            actionsCacheFolder: getInput("actions-cache-folder"),
+            cacheKey: getInput("cache-key"),
             // XXX: update-tags is deprecated and used for backwards compatibility.
-            update: (await getInput("update")) || (await getInput("update-tags")),
+            update: getBooleanInput("update") || getBooleanInput("update-tags"),
         };
+        let emsdkVersionToUse = emArgs.emsdkVersion;
+        if (!emsdkVersionToUse) {
+            if (emArgs.version === "latest" || emArgs.version === "tot") {
+                emsdkVersionToUse = "main";
+            }
+            else {
+                emsdkVersionToUse = emArgs.version;
+            }
+        }
         let emsdkFolder;
         let foundInCache = false;
-        if (emArgs.version !== "latest" &&
+        const combinedVersion = emsdkVersionToUse === emArgs.version
+            ? emsdkVersionToUse
+            : `${emsdkVersionToUse}-${emArgs.version}`;
+        if (emsdkVersionToUse !== "main" &&
+            emArgs.version !== "latest" &&
             emArgs.version !== "tot" &&
-            emArgs.noCache === "false" &&
+            !emArgs.noCache &&
             !emArgs.actionsCacheFolder) {
-            emsdkFolder = await find("emsdk", emArgs.version, external_os_namespaceObject.arch());
+            emsdkFolder = find("emsdk", combinedVersion, external_os_namespaceObject.arch());
         }
         const cacheKey = emArgs.cacheKey ||
-            `${process.env.GITHUB_WORKFLOW}-${emArgs.version}-${external_os_namespaceObject.platform()}-${external_os_namespaceObject.arch()}`;
+            `${process.env.GITHUB_WORKFLOW}-${combinedVersion}-${external_os_namespaceObject.platform()}-${external_os_namespaceObject.arch()}`;
         if (emArgs.actionsCacheFolder && process.env.GITHUB_WORKSPACE) {
             const fullCachePath = external_path_.join(process.env.GITHUB_WORKSPACE, emArgs.actionsCacheFolder);
             try {
@@ -87131,8 +87145,11 @@ async function run() {
             }
         }
         if (!emsdkFolder) {
-            const emsdkArchive = await downloadTool("https://github.com/emscripten-core/emsdk/archive/main.zip");
+            const emsdkArchive = await downloadTool(`https://github.com/emscripten-core/emsdk/archive/${emsdkVersionToUse}.zip`);
             emsdkFolder = await extractZip(emsdkArchive);
+            if (emsdkVersionToUse !== "main") {
+                await mv(external_path_.join(emsdkFolder, `emsdk-${emsdkVersionToUse}`), external_path_.join(emsdkFolder, "emsdk-main"));
+            }
         }
         else {
             foundInCache = true;
@@ -87141,7 +87158,7 @@ async function run() {
         if (external_os_namespaceObject.platform() === "win32") {
             emsdk = `powershell ${external_path_.join(emsdkFolder, "emsdk-main", "emsdk.ps1")}`;
         }
-        if (emArgs.noInstall === "true") {
+        if (emArgs.noInstall) {
             addPath(external_path_.join(emsdkFolder, "emsdk-main"));
             exportVariable("EMSDK", external_path_.join(emsdkFolder, "emsdk-main"));
             return;
@@ -87151,11 +87168,12 @@ async function run() {
                 await exec_exec(`${emsdk} update`);
             }
             await exec_exec(`${emsdk} install ${emArgs.version}`);
-            if (emArgs.version !== "latest" &&
+            if (emsdkVersionToUse !== "main" &&
+                emArgs.version !== "latest" &&
                 emArgs.version !== "tot" &&
-                emArgs.noCache === "false" &&
+                !emArgs.noCache &&
                 !emArgs.actionsCacheFolder) {
-                await cacheDir(emsdkFolder, "emsdk", emArgs.version, external_os_namespaceObject.arch());
+                await cacheDir(emsdkFolder, "emsdk", combinedVersion, external_os_namespaceObject.arch());
             }
         }
         await exec_exec(`${emsdk} activate ${emArgs.version}`);

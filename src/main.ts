@@ -11,31 +11,47 @@ import { envRegex, pathRegex } from "./matchers.js";
 async function run() {
   try {
     const emArgs = {
-      version: await core.getInput("version"),
-      noInstall: await core.getInput("no-install"),
-      noCache: await core.getInput("no-cache"),
-      actionsCacheFolder: await core.getInput("actions-cache-folder"),
-      cacheKey: await core.getInput("cache-key"),
+      version: core.getInput("version"),
+      emsdkVersion: core.getInput("emsdk-version"),
+      noInstall: core.getBooleanInput("no-install"),
+      noCache: core.getBooleanInput("no-cache"),
+      actionsCacheFolder: core.getInput("actions-cache-folder"),
+      cacheKey: core.getInput("cache-key"),
       // XXX: update-tags is deprecated and used for backwards compatibility.
       update:
-        (await core.getInput("update")) || (await core.getInput("update-tags")),
+        core.getBooleanInput("update") || core.getBooleanInput("update-tags"),
     };
+
+    let emsdkVersionToUse = emArgs.emsdkVersion;
+    if (!emsdkVersionToUse) {
+      if (emArgs.version === "latest" || emArgs.version === "tot") {
+        emsdkVersionToUse = "main";
+      } else {
+        emsdkVersionToUse = emArgs.version;
+      }
+    }
 
     let emsdkFolder;
     let foundInCache = false;
 
+    const combinedVersion =
+      emsdkVersionToUse === emArgs.version
+        ? emsdkVersionToUse
+        : `${emsdkVersionToUse}-${emArgs.version}`;
+
     if (
+      emsdkVersionToUse !== "main" &&
       emArgs.version !== "latest" &&
       emArgs.version !== "tot" &&
-      emArgs.noCache === "false" &&
+      !emArgs.noCache &&
       !emArgs.actionsCacheFolder
     ) {
-      emsdkFolder = await tc.find("emsdk", emArgs.version, os.arch());
+      emsdkFolder = tc.find("emsdk", combinedVersion, os.arch());
     }
 
     const cacheKey =
       emArgs.cacheKey ||
-      `${process.env.GITHUB_WORKFLOW}-${emArgs.version}-${os.platform()}-${os.arch()}`;
+      `${process.env.GITHUB_WORKFLOW}-${combinedVersion}-${os.platform()}-${os.arch()}`;
     if (emArgs.actionsCacheFolder && process.env.GITHUB_WORKSPACE) {
       const fullCachePath = path.join(
         process.env.GITHUB_WORKSPACE,
@@ -67,9 +83,15 @@ async function run() {
 
     if (!emsdkFolder) {
       const emsdkArchive = await tc.downloadTool(
-        "https://github.com/emscripten-core/emsdk/archive/main.zip",
+        `https://github.com/emscripten-core/emsdk/archive/${emsdkVersionToUse}.zip`,
       );
       emsdkFolder = await tc.extractZip(emsdkArchive);
+      if (emsdkVersionToUse !== "main") {
+        await io.mv(
+          path.join(emsdkFolder, `emsdk-${emsdkVersionToUse}`),
+          path.join(emsdkFolder, "emsdk-main"),
+        );
+      }
     } else {
       foundInCache = true;
     }
@@ -80,7 +102,7 @@ async function run() {
       emsdk = `powershell ${path.join(emsdkFolder, "emsdk-main", "emsdk.ps1")}`;
     }
 
-    if (emArgs.noInstall === "true") {
+    if (emArgs.noInstall) {
       core.addPath(path.join(emsdkFolder, "emsdk-main"));
       core.exportVariable("EMSDK", path.join(emsdkFolder, "emsdk-main"));
       return;
@@ -94,12 +116,13 @@ async function run() {
       await exec.exec(`${emsdk} install ${emArgs.version}`);
 
       if (
+        emsdkVersionToUse !== "main" &&
         emArgs.version !== "latest" &&
         emArgs.version !== "tot" &&
-        emArgs.noCache === "false" &&
+        !emArgs.noCache &&
         !emArgs.actionsCacheFolder
       ) {
-        await tc.cacheDir(emsdkFolder, "emsdk", emArgs.version, os.arch());
+        await tc.cacheDir(emsdkFolder, "emsdk", combinedVersion, os.arch());
       }
     }
 
