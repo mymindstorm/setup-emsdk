@@ -28,6 +28,8 @@ To just cache emsdk:
   with:
     # Make sure to set a version number!
     version: 1.38.40
+    # Optional emsdk version (set if not the same as emscripten version)
+    emsdk-version: 3.1.5
     # This is the name of the cache folder.
     # The cache folder will be placed in the build directory,
     #  so make sure it doesn't conflict with anything!
@@ -71,6 +73,9 @@ jobs:
 version:
   description: 'Version to install'
   default: 'latest'
+emsdk-version:
+  description: 'The version of emsdk that gets downloaded instead of making it the same as version'
+  default: ''
 no-install:
   description: "If true will not download any version of Emscripten. emsdk will still be added to PATH."
   default: false
