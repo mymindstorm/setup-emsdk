@@ -87099,24 +87099,28 @@ async function run() {
             actionsCacheFolder: await getInput("actions-cache-folder"),
             cacheKey: await getInput("cache-key"),
             // XXX: update-tags is deprecated and used for backwards compatibility.
-            update: await getInput("update") || await getInput("update-tags")
+            update: (await getInput("update")) || (await getInput("update-tags")),
         };
         let emsdkFolder;
         let foundInCache = false;
-        if (emArgs.version !== "latest" && emArgs.version !== "tot" && emArgs.noCache === "false" && !emArgs.actionsCacheFolder) {
-            emsdkFolder = await find('emsdk', emArgs.version, external_os_namespaceObject.arch());
+        if (emArgs.version !== "latest" &&
+            emArgs.version !== "tot" &&
+            emArgs.noCache === "false" &&
+            !emArgs.actionsCacheFolder) {
+            emsdkFolder = await find("emsdk", emArgs.version, external_os_namespaceObject.arch());
         }
-        const cacheKey = emArgs.cacheKey || `${process.env.GITHUB_WORKFLOW}-${emArgs.version}-${external_os_namespaceObject.platform()}-${external_os_namespaceObject.arch()}`;
+        const cacheKey = emArgs.cacheKey ||
+            `${process.env.GITHUB_WORKFLOW}-${emArgs.version}-${external_os_namespaceObject.platform()}-${external_os_namespaceObject.arch()}`;
         if (emArgs.actionsCacheFolder && process.env.GITHUB_WORKSPACE) {
             const fullCachePath = external_path_.join(process.env.GITHUB_WORKSPACE, emArgs.actionsCacheFolder);
             try {
                 try {
-                    external_fs_namespaceObject.accessSync(external_path_.join(fullCachePath, 'emsdk-main', 'emsdk'), external_fs_namespaceObject.constants.X_OK);
+                    external_fs_namespaceObject.accessSync(external_path_.join(fullCachePath, "emsdk-main", "emsdk"), external_fs_namespaceObject.constants.X_OK);
                 }
                 catch {
                     await restoreCache([emArgs.actionsCacheFolder], cacheKey);
                 }
-                external_fs_namespaceObject.accessSync(external_path_.join(fullCachePath, 'emsdk-main', 'emsdk'), external_fs_namespaceObject.constants.X_OK);
+                external_fs_namespaceObject.accessSync(external_path_.join(fullCachePath, "emsdk-main", "emsdk"), external_fs_namespaceObject.constants.X_OK);
                 emsdkFolder = fullCachePath;
                 foundInCache = true;
             }
@@ -87133,13 +87137,13 @@ async function run() {
         else {
             foundInCache = true;
         }
-        let emsdk = external_path_.join(emsdkFolder, 'emsdk-main', 'emsdk');
+        let emsdk = external_path_.join(emsdkFolder, "emsdk-main", "emsdk");
         if (external_os_namespaceObject.platform() === "win32") {
-            emsdk = `powershell ${external_path_.join(emsdkFolder, 'emsdk-main', 'emsdk.ps1')}`;
+            emsdk = `powershell ${external_path_.join(emsdkFolder, "emsdk-main", "emsdk.ps1")}`;
         }
         if (emArgs.noInstall === "true") {
-            addPath(external_path_.join(emsdkFolder, 'emsdk-main'));
-            exportVariable("EMSDK", external_path_.join(emsdkFolder, 'emsdk-main'));
+            addPath(external_path_.join(emsdkFolder, "emsdk-main"));
+            exportVariable("EMSDK", external_path_.join(emsdkFolder, "emsdk-main"));
             return;
         }
         if (!foundInCache) {
@@ -87147,8 +87151,11 @@ async function run() {
                 await exec_exec(`${emsdk} update`);
             }
             await exec_exec(`${emsdk} install ${emArgs.version}`);
-            if (emArgs.version !== "latest" && emArgs.version !== "tot" && emArgs.noCache === "false" && !emArgs.actionsCacheFolder) {
-                await cacheDir(emsdkFolder, 'emsdk', emArgs.version, external_os_namespaceObject.arch());
+            if (emArgs.version !== "latest" &&
+                emArgs.version !== "tot" &&
+                emArgs.noCache === "false" &&
+                !emArgs.actionsCacheFolder) {
+                await cacheDir(emsdkFolder, "emsdk", emArgs.version, external_os_namespaceObject.arch());
             }
         }
         await exec_exec(`${emsdk} activate ${emArgs.version}`);
@@ -87164,10 +87171,14 @@ async function run() {
                 return;
             }
         };
-        await exec_exec(`${emsdk} construct_env`, [], { listeners: { stdline: envListener, errline: envListener } });
-        if (emArgs.actionsCacheFolder && !foundInCache && process.env.GITHUB_WORKSPACE) {
+        await exec_exec(`${emsdk} construct_env`, [], {
+            listeners: { stdline: envListener, errline: envListener },
+        });
+        if (emArgs.actionsCacheFolder &&
+            !foundInCache &&
+            process.env.GITHUB_WORKSPACE) {
             external_fs_namespaceObject.mkdirSync(external_path_.join(process.env.GITHUB_WORKSPACE, emArgs.actionsCacheFolder), { recursive: true });
-            await io_cp(external_path_.join(emsdkFolder, 'emsdk-main'), external_path_.join(process.env.GITHUB_WORKSPACE, emArgs.actionsCacheFolder), { recursive: true });
+            await io_cp(external_path_.join(emsdkFolder, "emsdk-main"), external_path_.join(process.env.GITHUB_WORKSPACE, emArgs.actionsCacheFolder), { recursive: true });
             await cache_saveCache([emArgs.actionsCacheFolder], cacheKey);
         }
     }
@@ -87175,8 +87186,7 @@ async function run() {
         if (error &&
             typeof error === "object" &&
             "message" in error &&
-            (typeof error.message === "string" ||
-                error.message instanceof Error)) {
+            (typeof error.message === "string" || error.message instanceof Error)) {
             setFailed(error.message);
         }
     }
