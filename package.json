@@ -2,10 +2,12 @@
   "name": "setup-emsdk",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Github action to download and setup Emscripten",
   "main": "dist/index.js",
   "scripts": {
-    "build": "tsc && ncc build lib/main.js --license licenses.txt"
+    "build": "tsc && ncc build lib/main.js --license licenses.txt",
+    "test": "ava"
   },
   "repository": {
     "type": "git",
@@ -28,7 +30,19 @@
   "devDependencies": {
     "@types/node": "^24.0.0",
     "@vercel/ncc": "^0.38.4",
-    "ts-node": "^10.9.1",
+    "ava": "^7.0.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
     "typescript": "^6.0.2"
+  },
+  "ava": {
+    "extensions": {
+      "ts": "module"
+    },
+    "nodeArguments": [
+      "--import",
+      "tsx"
+    ],
+    "workerThreads": false
   }
 }
