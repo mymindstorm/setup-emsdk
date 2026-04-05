@@ -87093,15 +87093,14 @@ const envRegex = new RegExp(/(\S+) = (.+)/);
 async function run() {
     try {
         const emArgs = {
-            version: await getInput("version"),
-            emsdkVersion: await getInput("emsdk-version"),
-            noInstall: await getBooleanInput("no-install"),
-            noCache: await getBooleanInput("no-cache"),
-            actionsCacheFolder: await getInput("actions-cache-folder"),
-            cacheKey: await getInput("cache-key"),
+            version: getInput("version"),
+            emsdkVersion: getInput("emsdk-version"),
+            noInstall: getBooleanInput("no-install"),
+            noCache: getBooleanInput("no-cache"),
+            actionsCacheFolder: getInput("actions-cache-folder"),
+            cacheKey: getInput("cache-key"),
             // XXX: update-tags is deprecated and used for backwards compatibility.
-            update: (await getBooleanInput("update")) ||
-                (await getBooleanInput("update-tags")),
+            update: getBooleanInput("update") || getBooleanInput("update-tags"),
         };
         let emsdkVersionToUse = emArgs.emsdkVersion;
         if (!emsdkVersionToUse) {
