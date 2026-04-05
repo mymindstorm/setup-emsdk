@@ -11,16 +11,15 @@ import { envRegex, pathRegex } from "./matchers.js";
 async function run() {
   try {
     const emArgs = {
-      version: await core.getInput("version"),
-      emsdkVersion: await core.getInput("emsdk-version"),
-      noInstall: await core.getBooleanInput("no-install"),
-      noCache: await core.getBooleanInput("no-cache"),
-      actionsCacheFolder: await core.getInput("actions-cache-folder"),
-      cacheKey: await core.getInput("cache-key"),
+      version: core.getInput("version"),
+      emsdkVersion: core.getInput("emsdk-version"),
+      noInstall: core.getBooleanInput("no-install"),
+      noCache: core.getBooleanInput("no-cache"),
+      actionsCacheFolder: core.getInput("actions-cache-folder"),
+      cacheKey: core.getInput("cache-key"),
       // XXX: update-tags is deprecated and used for backwards compatibility.
       update:
-        (await core.getBooleanInput("update")) ||
-        (await core.getBooleanInput("update-tags")),
+        core.getBooleanInput("update") || core.getBooleanInput("update-tags"),
     };
 
     let emsdkVersionToUse = emArgs.emsdkVersion;
