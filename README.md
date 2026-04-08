@@ -27,9 +27,9 @@ To just cache emsdk:
   uses: emscripten-core/setup-emsdk@v15
   with:
     # Make sure to set a version number!
-    version: 1.38.40
+    version: 5.0.1
     # Optional emsdk version (set if not the same as emscripten version)
-    emsdk-version: 3.1.5
+    emsdk-version: 5.0.5
     # This is the name of the cache folder.
     # The cache folder will be placed in the build directory,
     #  so make sure it doesn't conflict with anything!
@@ -43,7 +43,7 @@ If you want to also cache system libraries generated during build time:
 
 ```yaml
 env:
-  EM_VERSION: 1.39.18
+  EM_VERSION: 5.0.1
   EM_CACHE_FOLDER: 'emsdk-cache'
 
 jobs:
