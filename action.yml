@@ -1,6 +1,6 @@
 name: "Setup Emscripten toolchain"
 description: "Download emsdk and optionally install a version of Emscripten"
-author: "mymindstorm"
+author: "emscripten-core"
 inputs:
   version:
     description: "Version emscripten to install"

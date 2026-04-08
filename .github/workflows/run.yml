@@ -2,7 +2,7 @@ name: "Run"
 on:
   push:
     branches:
-      - "master"
+      - "main"
 
 jobs:
   defaults:
@@ -11,7 +11,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
-    - uses: emscripten-core/setup-emsdk@master
+    - uses: emscripten-core/setup-emsdk@main
 
     - name: Verify
       run: emcc -v
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup emsdk (use cache if found, create otherwise)
-        uses: emscripten-core/setup-emsdk@master
+        uses: emscripten-core/setup-emsdk@main
         with:
           version: 4.0.9
           actions-cache-folder: 'emsdk-cache-folder'
@@ -30,7 +30,7 @@ jobs:
   no-install:
     runs-on: ubuntu-latest
     steps:
-      - uses: emscripten-core/setup-emsdk@master
+      - uses: emscripten-core/setup-emsdk@main
         with:
           no-install: true
 
@@ -40,7 +40,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup emsdk (use cache if found, create otherwise)
-        uses: emscripten-core/setup-emsdk@master
+        uses: emscripten-core/setup-emsdk@main
         with:
           version: tot
           no-cache: true
