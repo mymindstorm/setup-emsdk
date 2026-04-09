@@ -9,10 +9,6 @@
     "build": "tsc && ncc build lib/main.js --license licenses.txt",
     "test": "ava"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/actions/node12-template.git"
-  },
   "keywords": [
     "actions",
     "node",
