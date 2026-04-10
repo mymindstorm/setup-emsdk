@@ -67,15 +67,15 @@ jobs:
         run: make check
 ```
 
-## Options
+## Common Options
 
 ```yaml
 version:
-  description: 'Version to install'
-  default: 'latest'
+  description: "Version emscripten to install"
+  default: "latest"
 emsdk-version:
-  description: 'The version of emsdk that gets downloaded instead of making it the same as version'
-  default: ''
+  description: "Version of emsdk to install (set if not the same as emscripten version)"
+  default: ""
 no-install:
   description: "If true will not download any version of Emscripten. emsdk will still be added to PATH."
   default: false
@@ -84,10 +84,10 @@ no-cache:
   default: false
 actions-cache-folder:
   description: "Directory to cache emsdk in. This folder will go under $GITHUB_HOME (I.e. build dir) and be cached using @actions/cache."
-  default: ''
+  default: ""
 update:
   description: "Fetch package information for all the new tools and SDK versions"
   default: false
 ```
 
-See [action.yml](action.yml)
+See [action.yml](action.yml) for all options
